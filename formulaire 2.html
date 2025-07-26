@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Form with Blurred Background</title>
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background-image: url('Sasuke-Uchiha-head-black-hair-Anime-Naruto-Shippuuden-Naruto-YH-YitYJLcgCNM.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        form {
+            background-color: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-header h2 {
+            color: #fff;
+            font-size: 28px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-header p {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .form-group input, 
+        .form-group textarea, 
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.9);
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-group input:focus, 
+        .form-group textarea:focus, 
+        .form-group select:focus {
+            outline: none;
+            background-color: #fff;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.4);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background-color: #4a6fa5;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #3a5a8f;
+            transform: translateY(-2px);
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 20px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+        }
+
+        .form-footer a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        @media (max-width: 600px) {
+            form {
+                padding: 30px 20px;
+            }
+            
+            .form-header h2 {
+                font-size: 24px;
+            }
+        }
+    label{
+        color:black;
+        font-weight:bold;
+    }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <form>
+            <div class="form-header">
+                <h2>Contact Us</h2>
+            </div>
+            
+            <div class="form-group">
+                <label for="name" style="color:black; font-weight:bold;">Name</label>
+                <input type="text" id="name" placeholder="Name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="number" style="color:black; font-weight:bold;">Number</label>
+                <input type="tel" id="number" placeholder="674">
+            </div>
+            
+            <div class="form-group">
+                <label for="email" style="color:black; font-weight:bold;">Email</label>
+                <input type="email" id="email" placeholder="@Email.." required>
+            </div>
+            
+            <div class="form-group">
+                <textarea id="message" placeholder="Enter your message here..." required></textarea>
+            </div>
+            
+            <button type="submit" id="submit">Submit</button>
+        </form>
+    </div>
+    <script>
+        document.getElementById("submit").addEventListener("click", function(event) {
+            event.preventDefault(); // Prevent the default form submission
+            
+            const name = document.getElementById("name").value;
+            const number = document.getElementById("number").value;
+            const email = document.getElementById("email").value;
+            const message = document.getElementById("message").value;
+            
+            if(name && email && message) {
+                alert(`Name: ${name}\nNumber: ${number}\nEmail: ${email}\nMessage: ${message}`);
+            } else {
+                alert("Please fill in all required fields (Name, Email, and Message)");
+            }
+        });
+    </script>
+</body>
+</html>
