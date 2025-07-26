@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChipsMe Profit Calculator</title>
+  <style>
+    :root {
+      --primary: #6c5ce7;
+      --secondary: #a29bfe;
+      --dark: #2d3436;
+      --light: #f5f6fa;
+      --success: #00b894;
+      --warning: #fdcb6e;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      color: var(--dark);
+    }
+
+    .floating-card {
+      width: 100%;
+      max-width: 500px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+      transform-style: preserve-3d;
+      transition: transform 0.5s ease;
+    }
+
+    .floating-card:hover {
+      transform: translateY(-10px) rotateX(5deg);
+    }
+
+    .card-header {
+      background: var(--primary);
+      color: white;
+      padding: 25px;
+      text-align: center;
+      position: relative;
+    }
+
+    .card-header h1 {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+    }
+
+    .partner-link {
+      display: inline-block;
+      background: white;
+      color: var(--primary);
+      padding: 8px 15px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-top: 10px;
+      transition: all 0.3s;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .partner-link:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-body {
+      padding: 30px;
+    }
+
+    .role-selector {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 25px;
+      background: var(--light);
+      border-radius: 50px;
+      padding: 5px;
+      position: relative;
+    }
+
+    .role-selector::after {
+      content: '';
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      width: calc(50% - 5px);
+      height: calc(100% - 10px);
+      background: white;
+      border-radius: 50px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+
+    .role-selector.seller-active::after {
+      transform: translateX(0);
+    }
+
+    .role-selector.partner-active::after {
+      transform: translateX(100%);
+    }
+
+    .role-btn {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      background: transparent;
+      font-weight: 600;
+      cursor: pointer;
+      position: relative;
+      z-index: 1;
+      transition: color 0.3s;
+    }
+
+    .input-container {
+      margin-bottom: 25px;
+      position: relative;
+    }
+
+    .input-container label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .input-container input {
+      width: 100%;
+      padding: 15px;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+
+    .input-container input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+    }
+
+    .calculate-btn {
+      width: 100%;
+      padding: 16px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 4px 8px rgba(108, 92, 231, 0.3);
+    }
+
+    .calculate-btn:hover {
+      background: #5649d1;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(108, 92, 231, 0.4);
+    }
+
+    .calculate-btn:active {
+      transform: translateY(0);
+    }
+
+    .result-container {
+      margin-top: 25px;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      font-weight: 600;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.4s;
+      background: var(--light);
+    }
+
+    .result-container.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .result-amount {
+      font-size: 1.8rem;
+      color: var(--primary);
+      margin: 10px 0;
+    }
+
+    .info-note {
+      margin-top: 30px;
+      padding: 15px;
+      background: #fff9e6;
+      border-left: 4px solid var(--warning);
+      border-radius: 0 8px 8px 0;
+    }
+
+    .info-note h3 {
+      margin-bottom: 10px;
+      color: var(--dark);
+    }
+
+    .info-note ul {
+      padding-left: 20px;
+    }
+
+    .info-note li {
+      margin-bottom: 5px;
+    }
+
+    @media (max-width: 480px) {
+      .card-header h1 {
+        font-size: 1.5rem;
+      }
+      
+      .card-body {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="floating-card">
+    <div class="card-header">
+      <h1>ChipsMe Profit Calculator</h1>
+      <a href="https://bolt.new/~/sb1-gczmmmd4" class="partner-link" target="_blank">
+        Visit Partner Site ↗
+      </a>
+    </div>
+    
+    <div class="card-body">
+      <div class="role-selector seller-active" id="roleSelector">
+        <button class="role-btn" onclick="selectRole('seller')">Seller</button>
+        <button class="role-btn" onclick="selectRole('partner')">Partner</button>
+      </div>
+      
+      <div class="input-container">
+        <label id="input-label">Number of packages sold</label>
+        <input type="number" id="input" min="0" placeholder="Enter amount...">
+      </div>
+      
+      <button class="calculate-btn" onclick="calculateProfit()">
+        Calculate My Profit
+      </button>
+      
+      <div class="result-container" id="resultContainer">
+        <div id="resultRole"></div>
+        <div class="result-amount" id="resultAmount"></div>
+        <div id="resultNote"></div>
+      </div>
+      
+      <div class="info-note">
+        <h3>Minimum Profit Guarantee</h3>
+        <ul>
+          <li>ChipsMe Seller: 6,000 FCFA weekly</li>
+          <li>ChipsMe Partner: 3,000 FCFA weekly</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Current selected role
+    let currentRole = 'seller';
+    
+    // Select role function with animation
+    function selectRole(role) {
+      currentRole = role;
+      const roleSelector = document.getElementById('roleSelector');
+      
+      // Update active class for animation
+      if (role === 'seller') {
+        roleSelector.classList.remove('partner-active');
+        roleSelector.classList.add('seller-active');
+        document.getElementById('input-label').textContent = 'Number of packages sold';
+        document.getElementById('input').placeholder = 'Enter packages sold...';
+      } else {
+        roleSelector.classList.remove('seller-active');
+        roleSelector.classList.add('partner-active');
+        document.getElementById('input-label').textContent = 'Number of customers referred';
+        document.getElementById('input').placeholder = 'Enter customers referred...';
+      }
+    }
+    
+    // Calculate profit function
+    function calculateProfit() {
+      const input = parseInt(document.getElementById('input').value);
+      const resultContainer = document.getElementById('resultContainer');
+      const resultRole = document.getElementById('resultRole');
+      const resultAmount = document.getElementById('resultAmount');
+      const resultNote = document.getElementById('resultNote');
+      
+      // Validate input
+      if (isNaN(input) || input < 0) {
+        showResult('Please enter a valid number', 'red', '');
+        return;
+      }
+      
+      // Calculate based on role
+      let profit, roleText, rateText;
+      if (currentRole === 'seller') {
+        profit = input * 500;
+        roleText = 'As a ChipsMe Seller';
+        rateText = '500 FCFA per package';
+      } else {
+        profit = input * 250;
+        roleText = 'As a Sleeping Partner';
+        rateText = '250 FCFA per customer';
+      }
+      
+      // Display result
+      const formattedProfit = profit.toLocaleString() + ' FCFA';
+      showResult(roleText, formattedProfit, rateText);
+    }
+    
+    // Show result with animation
+    function showResult(role, amount, note) {
+      const resultContainer = document.getElementById('resultContainer');
+      const resultRole = document.getElementById('resultRole');
+      const resultAmount = document.getElementById('resultAmount');
+      const resultNote = document.getElementById('resultNote');
+      
+      resultRole.textContent = role;
+      resultAmount.textContent = amount;
+      resultNote.textContent = note;
+      
+      // Add show class for animation
+      resultContainer.classList.add('show');
+      
+      // Set color based on amount
+      if (amount === 'Please enter a valid number') {
+        resultAmount.style.color = 'red';
+      } else {
+        resultAmount.style.color = 'var(--primary)';
+      }
+    }
+    
+    // Initialize with seller role selected
+    document.addEventListener('DOMContentLoaded', function() {
+      selectRole('seller');
+    });
+  </script>
+</body>
+</html>
