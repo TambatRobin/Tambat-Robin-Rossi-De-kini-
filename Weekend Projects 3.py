@@ -26,7 +26,7 @@ else:
 job_title = input("\nWhat job do you want? (e.g. 'python' or 'designer'): ")
 
 #API setup
-api_key = "Sir i couldn't copy my Api Key 😒"
+api_key = "Tu veux copié le Api Key de Qui"
 url = "https://jsearch.p.rapidapi.com/search"
 headers = {
     "X-RapidAPI-Key": api_key,
